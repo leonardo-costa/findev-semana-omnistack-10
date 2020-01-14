@@ -48,4 +48,38 @@ module.exports = {
       return res.json({ error: true });
     }
   },
+
+  async update(req, res) {
+    const { github_username } = req.query;
+    const { name, techs, avatar_url, bio, latitude, longitude } = req.body;
+
+    const techsArray = parseStringAsArray(techs);
+
+    const location = {
+      type: 'Point',
+      coordinates: [longitude, latitude],
+    };
+
+    const values = {
+      name,
+      avatar_url,
+      bio,
+      techs: techsArray,
+      location,
+    };
+
+    await Dev.update(values);
+
+    const devExists = await Dev.findOne({ github_username });
+
+    if (!devExists) {
+      return res.status(400).json({ error: 'Dev does not exists' });
+    }
+
+    return res.json(devExists);
+  },
+
+  async destroy(req, res) {
+    return res.json({ ok: true });
+  },
 };
