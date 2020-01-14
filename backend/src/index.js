@@ -9,7 +9,7 @@ const app = express();
 const PORT = process.env.PORT || 3333;
 
 mongoose.connect(
-  `mongodb+srv://${process.env.MONGODB_USER_LOGIN}:${process.env.MONGODB_USER_PASSWORD}@${process.env.MONGODB_URL}?retryWrites=true&w=majority`,
+  `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@${process.env.MONGO_URL}?retryWrites=true&w=majority`,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -19,6 +19,4 @@ mongoose.connect(
 app.use(express.json());
 app.use(routes);
 
-app.listen(PORT, () => {
-  console.log(`App running on port: ${PORT}`);
-});
+app.listen(PORT);
