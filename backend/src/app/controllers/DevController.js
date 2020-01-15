@@ -80,6 +80,18 @@ module.exports = {
   },
 
   async destroy(req, res) {
-    return res.json({ ok: true });
+    const { github_username } = req.body;
+
+    const devExists = await Dev.findOne({ github_username });
+
+    if (!devExists) {
+      return res.status(400).json({ error: 'Dev does not exists' });
+    }
+
+    await Dev.deleteOne({ github_username });
+
+    const devs = await Dev.find();
+
+    return res.json(devs);
   },
 };
