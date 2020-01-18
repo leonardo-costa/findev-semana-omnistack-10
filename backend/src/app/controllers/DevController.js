@@ -1,6 +1,7 @@
 const axios = require('axios');
 const Dev = require('../models/Dev');
 const parseStringAsArray = require('../../utils/parseStringAsArray');
+const { findConnections, sendMessage } = require('../../websocket');
 
 module.exports = {
   async index(req, res) {
@@ -42,6 +43,11 @@ module.exports = {
       };
 
       const dev = await Dev.create(values);
+
+      // check if dev has one of the techs and if he is near to 10km
+      const sendSocketTo = findConnections({ latitude, longitude }, techsArray);
+
+      sendMessage(sendSocketTo, 'new-dev', dev);
 
       return res.json(dev);
     } catch (error) {
