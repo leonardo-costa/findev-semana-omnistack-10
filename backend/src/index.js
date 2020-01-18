@@ -2,12 +2,14 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
+const http = require('http');
 const mongoose = require('mongoose');
 const routes = require('./routes');
 
 const app = express();
 
 app.use(cors());
+const server = http.Server(app);
 
 const PORT = process.env.PORT || 3333;
 
@@ -22,4 +24,4 @@ mongoose.connect(
 app.use(express.json());
 app.use(routes);
 
-app.listen(PORT);
+server.listen(PORT);
